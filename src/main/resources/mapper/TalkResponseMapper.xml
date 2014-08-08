@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.syj.app.web.dao.TalkResponseMapper" >
+  <resultMap id="BaseResultMap" type="com.syj.app.web.model.TalkResponse" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="talk_id" property="talkId" jdbcType="BIGINT" />
+    <result column="from_user_id" property="fromUserId" jdbcType="BIGINT" />
+    <result column="from_user_name" property="fromUserName" jdbcType="VARCHAR" />
+    <result column="to_user_id" property="toUserId" jdbcType="BIGINT" />
+    <result column="to_user_name" property="toUserName" jdbcType="VARCHAR" />
+    <result column="response_msg" property="responseMsg" jdbcType="VARCHAR" />
+    <result column="response_time" property="responseTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, talk_id, from_user_id, from_user_name, to_user_id, to_user_name, response_msg, 
+    response_time, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from talk_response
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from talk_response
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.syj.app.web.model.TalkResponse" >
+    insert into talk_response (id, talk_id, from_user_id, 
+      from_user_name, to_user_id, to_user_name, 
+      response_msg, response_time, status
+      )
+    values (#{id,jdbcType=BIGINT}, #{talkId,jdbcType=BIGINT}, #{fromUserId,jdbcType=BIGINT}, 
+      #{fromUserName,jdbcType=VARCHAR}, #{toUserId,jdbcType=BIGINT}, #{toUserName,jdbcType=VARCHAR}, 
+      #{responseMsg,jdbcType=VARCHAR},now(), #{status,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.syj.app.web.model.TalkResponse" >
+    insert into talk_response
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="talkId != null" >
+        talk_id,
+      </if>
+      <if test="fromUserId != null" >
+        from_user_id,
+      </if>
+      <if test="fromUserName != null" >
+        from_user_name,
+      </if>
+      <if test="toUserId != null" >
+        to_user_id,
+      </if>
+      <if test="toUserName != null" >
+        to_user_name,
+      </if>
+      <if test="responseMsg != null" >
+        response_msg,
+      </if>
+        response_time,
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="talkId != null" >
+        #{talkId,jdbcType=BIGINT},
+      </if>
+      <if test="fromUserId != null" >
+        #{fromUserId,jdbcType=BIGINT},
+      </if>
+      <if test="fromUserName != null" >
+        #{fromUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserId != null" >
+        #{toUserId,jdbcType=BIGINT},
+      </if>
+      <if test="toUserName != null" >
+        #{toUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="responseMsg != null" >
+        #{responseMsg,jdbcType=VARCHAR},
+      </if>
+        now(),
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.syj.app.web.model.TalkResponse" >
+    update talk_response
+    <set >
+      <if test="talkId != null" >
+        talk_id = #{talkId,jdbcType=BIGINT},
+      </if>
+      <if test="fromUserId != null" >
+        from_user_id = #{fromUserId,jdbcType=BIGINT},
+      </if>
+      <if test="fromUserName != null" >
+        from_user_name = #{fromUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserId != null" >
+        to_user_id = #{toUserId,jdbcType=BIGINT},
+      </if>
+      <if test="toUserName != null" >
+        to_user_name = #{toUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="responseMsg != null" >
+        response_msg = #{responseMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="responseTime != null" >
+        response_time = #{responseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.syj.app.web.model.TalkResponse" >
+    update talk_response
+    set talk_id = #{talkId,jdbcType=BIGINT},
+      from_user_id = #{fromUserId,jdbcType=BIGINT},
+      from_user_name = #{fromUserName,jdbcType=VARCHAR},
+      to_user_id = #{toUserId,jdbcType=BIGINT},
+      to_user_name = #{toUserName,jdbcType=VARCHAR},
+      response_msg = #{responseMsg,jdbcType=VARCHAR},
+      response_time = #{responseTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.talkId and ''!=params.talkId" >
+      		AND talk_id  =#{params.talkId}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+      		AND status  =#{params.status}
+      </if>
+        <if test="null!=params.fromUserNameLike and ''!=params.fromUserNameLike" >
+      		AND from_user_name LIKE  CONCAT(CONCAT('%',#{params.fromUserNameLike}),'%')
+      </if>
+       <if test="null!=params.responseTimeStart and ''!=params.responseTimeStart" >
+      	<![CDATA[ 	AND response_time >= CONCAT(#{params.responseTimeStart},' 00:00:00')]]>
+      </if>
+      <if test="null!=params.responseTimeEnd and ''!=params.responseTimeEnd" >
+      	<![CDATA[ 	AND response_time <= CONCAT(#{params.responseTimeEnd},' 23:59:59')]]>
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from talk_response where 1=1
+		<include refid="queryCondition" />
+		ORDER BY response_time 
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from talk_response where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from talk_response 
+         WHERE 1=1
+      <include refid="queryCondition" />      
+      ORDER BY response_time  
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+  
+  <delete id="deleteByPrimarayKeyForModel" parameterType="com.syj.app.web.model.UserTalk" >
+    delete from talk_response
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+</mapper>

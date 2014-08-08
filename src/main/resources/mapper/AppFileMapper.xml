@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.syj.app.web.dao.AppFileMapper" >
+  <resultMap id="BaseResultMap" type="com.syj.app.web.model.AppFile" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="owner_id" property="ownerId" jdbcType="BIGINT" />
+    <result column="image_type" property="imageType" jdbcType="SMALLINT" />
+    <result column="image_path" property="imagePath" jdbcType="VARCHAR" />
+    <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, owner_id, image_type, image_path, upload_time
+  </sql>
+  
+    <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.ownerId and ''!=params.ownerId" >
+      		AND owner_id =#{params.ownerId}
+      </if>
+      <if test="null!=params.imageType and ''!=params.imageType" >
+      		AND image_type =#{params.imageType}
+      </if>
+    </if>
+  </sql> 
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_file
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_file
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.syj.app.web.model.AppFile" >
+    insert into app_file (id, owner_id, image_type, 
+      image_path, upload_time)
+    values (#{id,jdbcType=BIGINT}, #{ownerId,jdbcType=BIGINT}, #{imageType,jdbcType=SMALLINT}, 
+      #{imagePath,jdbcType=VARCHAR}, now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.syj.app.web.model.AppFile" >
+    insert into app_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="ownerId != null" >
+        owner_id,
+      </if>
+      <if test="imageType != null" >
+        image_type,
+      </if>
+      <if test="imagePath != null" >
+        image_path,
+      </if>
+        upload_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="ownerId != null" >
+        #{ownerId,jdbcType=BIGINT},
+      </if>
+      <if test="imageType != null" >
+        #{imageType,jdbcType=SMALLINT},
+      </if>
+      <if test="imagePath != null" >
+        #{imagePath,jdbcType=VARCHAR},
+      </if>
+       now()
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.syj.app.web.model.AppFile" >
+    update app_file
+    <set >
+      <if test="ownerId != null" >
+        owner_id = #{ownerId,jdbcType=BIGINT},
+      </if>
+      <if test="imageType != null" >
+        image_type = #{imageType,jdbcType=SMALLINT},
+      </if>
+      <if test="imagePath != null" >
+        image_path = #{imagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadTime != null" >
+        upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.syj.app.web.model.AppFile" >
+    update app_file
+    set owner_id = #{ownerId,jdbcType=BIGINT},
+      image_type = #{imageType,jdbcType=SMALLINT},
+      image_path = #{imagePath,jdbcType=VARCHAR},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+    <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from app_file where 1=1
+		<include refid="queryCondition" />
+	</select>
+	
+	
+    <delete id="deleteByPrimarayKeyForModel" parameterType="com.syj.app.web.model.AppFile" >
+    delete from app_file
+    where  id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+</mapper>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.syj.app.web.dao.UserFriendMapper" >
+  <resultMap id="BaseResultMap" type="com.syj.app.web.model.UserFriend" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="friend_user_id" property="friendUserId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="friend_user_name" property="friendUserName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, friend_user_id, create_time, friend_user_name, status, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_friend
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_friend
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.syj.app.web.model.UserFriend" >
+    insert into user_friend (id, user_id, friend_user_id, 
+      create_time, friend_user_name, status, 
+      remark)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{friendUserId,jdbcType=BIGINT}, 
+      now(), #{friendUserName,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.syj.app.web.model.UserFriend" >
+    insert into user_friend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="friendUserId != null" >
+        friend_user_id,
+      </if>
+        create_time,
+      <if test="friendUserName != null" >
+        friend_user_name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="friendUserId != null" >
+        #{friendUserId,jdbcType=BIGINT},
+      </if>
+      now(),
+      <if test="friendUserName != null" >
+        #{friendUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.syj.app.web.model.UserFriend" >
+    update user_friend
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="friendUserId != null" >
+        friend_user_id = #{friendUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="friendUserName != null" >
+        friend_user_name = #{friendUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+   <update id="updateStatus" parameterType="com.syj.app.web.model.UserFriend" >
+    update user_friend
+    <set >
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where  user_id = #{userId,jdbcType=BIGINT}  and  friend_user_id = #{friendUserId,jdbcType=BIGINT}
+  </update>
+  
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.syj.app.web.model.UserFriend" >
+    update user_friend
+    set user_id = #{userId,jdbcType=BIGINT},
+      friend_user_id = #{friendUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      friend_user_name = #{friendUserName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.userId and ''!=params.userId" >
+      		AND user_id  =#{params.userId}
+      </if>
+       <if test="null!=params.friendUserId and ''!=params.friendUserId" >
+      		AND friend_user_id =#{params.friendUserId}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+      		AND status =#{params.status}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from user_friend where 1=1
+		<include refid="queryCondition" />
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from user_friend where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from user_friend 
+         WHERE 1=1
+      <include refid="queryCondition" />       
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+  
+  <delete id="deleteByPrimarayKeyForModel" parameterType="com.syj.app.web.model.UserFriend" >
+    delete from user_friend
+    where 1=1
+    	<if test="id != null" >
+    	  and id = #{id,jdbcType=BIGINT}
+    	</if>
+       <if test="userId != null" >
+    	  and  user_id = #{userId,jdbcType=BIGINT}
+    	</if>
+    	 <if test="friendUserId != null" >
+    	  and  friend_user_id = #{friendUserId,jdbcType=BIGINT}
+    	</if>
+  </delete>
+  
+  
+</mapper>

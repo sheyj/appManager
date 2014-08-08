@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.syj.app.web.dao.AppActivateMapper" >
+  <resultMap id="BaseResultMap" type="com.syj.app.web.model.AppActivate" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
+    <result column="mobile_type" property="mobileType" jdbcType="VARCHAR" />
+    <result column="android_version" property="androidVersion" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="from_name" property="fromName" jdbcType="VARCHAR" />
+    <result column="from_no" property="fromNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, device_id, mobile_type, android_version, create_time, from_name, from_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_activate
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_activate
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.syj.app.web.model.AppActivate" >
+    insert into app_activate (id, device_id, mobile_type, 
+      android_version, create_time, from_name, 
+      from_no)
+    values (#{id,jdbcType=BIGINT}, #{deviceId,jdbcType=VARCHAR}, #{mobileType,jdbcType=VARCHAR}, 
+      #{androidVersion,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{fromName,jdbcType=VARCHAR}, 
+      #{fromNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.syj.app.web.model.AppActivate" >
+    insert into app_activate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="mobileType != null" >
+        mobile_type,
+      </if>
+      <if test="androidVersion != null" >
+        android_version,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="fromName != null" >
+        from_name,
+      </if>
+      <if test="fromNo != null" >
+        from_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileType != null" >
+        #{mobileType,jdbcType=VARCHAR},
+      </if>
+      <if test="androidVersion != null" >
+        #{androidVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fromName != null" >
+        #{fromName,jdbcType=VARCHAR},
+      </if>
+      <if test="fromNo != null" >
+        #{fromNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.syj.app.web.model.AppActivate" >
+    update app_activate
+    <set >
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileType != null" >
+        mobile_type = #{mobileType,jdbcType=VARCHAR},
+      </if>
+      <if test="androidVersion != null" >
+        android_version = #{androidVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fromName != null" >
+        from_name = #{fromName,jdbcType=VARCHAR},
+      </if>
+      <if test="fromNo != null" >
+        from_no = #{fromNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.syj.app.web.model.AppActivate" >
+    update app_activate
+    set device_id = #{deviceId,jdbcType=VARCHAR},
+      mobile_type = #{mobileType,jdbcType=VARCHAR},
+      android_version = #{androidVersion,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      from_name = #{fromName,jdbcType=VARCHAR},
+      from_no = #{fromNo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.deviceId and ''!=params.deviceId" >
+      		AND device_id =#{params.deviceId}
+      </if>
+      <if test="null!=params.mobileType and ''!=params.mobileType" >
+      		AND mobile_type =#{params.mobileType}
+      </if>
+       <if test="null!=params.fromNameLike and ''!=params.fromNameLike" >
+      		AND from_name  LIKE CONCAT(CONCAT('%',#{params.fromNameLike}),'%')
+      </if>
+      <if test="null!=params.fromNoLike and ''!=params.fromNoLike" >
+      		AND from_no LIKE  CONCAT(CONCAT('%',#{params.fromNoLike}),'%')
+      </if>
+      <if test="null!=params.createTimeStart and ''!=params.createTimeStart" >
+      	<![CDATA[ 	AND create_time >= CONCAT(#{params.createTimeStart},' 00:00:00')]]>
+      </if>
+      <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd" >
+      	<![CDATA[ 	AND create_time <= CONCAT(#{params.createTimeEnd},' 23:59:59')]]>
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from app_activate where 1=1
+		<include refid="queryCondition" />
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from app_activate where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from app_activate 
+         WHERE 1=1
+      <include refid="queryCondition" />      
+      order by  create_time desc 
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+  
+  <delete id="deleteByPrimarayKeyForModel" parameterType="com.syj.app.web.model.AppActivate" >
+    delete from app_activate
+    where  id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  
+  
+</mapper>

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.syj.app.web.dao.UserTalkMapper" >
+  <resultMap id="BaseResultMap" type="com.syj.app.web.model.UserTalk" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="image_path" property="imagePath" jdbcType="VARCHAR" />
+    <result column="talk_content" property="talkContent" jdbcType="VARCHAR" />
+    <result column="talk_type" property="talkType" jdbcType="SMALLINT" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id,user_name, image_path, talk_content, talk_type, location, create_time, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_talk
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_talk
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.syj.app.web.model.UserTalk" >
+    insert into user_talk (id, user_id,user_name, image_path, 
+      talk_content, talk_type, location, 
+      create_time, status)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{imagePath,jdbcType=VARCHAR}, 
+      #{talkContent,jdbcType=VARCHAR}, #{talkType,jdbcType=SMALLINT}, #{location,jdbcType=VARCHAR}, 
+     now(), #{status,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.syj.app.web.model.UserTalk" >
+    insert into user_talk
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+       <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="imagePath != null" >
+        image_path,
+      </if>
+      <if test="talkContent != null" >
+        talk_content,
+      </if>
+      <if test="talkType != null" >
+        talk_type,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+        create_time,
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+       <if test="imagePath != null" >
+        #{imagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="talkContent != null" >
+        #{talkContent,jdbcType=VARCHAR},
+      </if>
+      <if test="talkType != null" >
+        #{talkType,jdbcType=SMALLINT},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+        now(),
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.syj.app.web.model.UserTalk" >
+    update user_talk
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="imagePath != null" >
+        image_path = #{imagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="talkContent != null" >
+        talk_content = #{talkContent,jdbcType=VARCHAR},
+      </if>
+      <if test="talkType != null" >
+        talk_type = #{talkType,jdbcType=SMALLINT},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.syj.app.web.model.UserTalk" >
+    update user_talk
+    set user_id = #{userId,jdbcType=BIGINT},
+     user_name = #{userName,jdbcType=VARCHAR},
+      image_path = #{imagePath,jdbcType=VARCHAR},
+      talk_content = #{talkContent,jdbcType=VARCHAR},
+      talk_type = #{talkType,jdbcType=SMALLINT},
+      location = #{location,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.userId and ''!=params.userId" >
+      		AND user_id  =#{params.userId}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+      		AND status  =#{params.status}
+      </if>
+      <if test="null!=params.createTimeStart and ''!=params.createTimeStart" >
+      	<![CDATA[ 	AND create_time >= CONCAT(#{params.createTimeStart},' 00:00:00')]]>
+      </if>
+      <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd" >
+      	<![CDATA[ 	AND create_time <= CONCAT(#{params.createTimeEnd},' 23:59:59')]]>
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from user_talk where 1=1
+		<include refid="queryCondition" />
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from user_talk where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from user_talk 
+         WHERE 1=1
+      <include refid="queryCondition" /> 
+      order by  create_time desc       
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+  
+  <delete id="deleteByPrimarayKeyForModel" parameterType="com.syj.app.web.model.UserTalk" >
+    delete from user_talk
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  
+  <select id="getLastUserTalk" resultMap="BaseResultMap" parameterType="com.syj.app.web.model.UserTalk" >
+      select  
+      <include refid="Base_Column_List" />
+       from user_talk 
+         WHERE user_id  =#{userId}
+      order by  create_time desc       
+      limit 0,1
+  </select>
+  
+  <select id="findTalkCount" resultType="java.lang.Integer" parameterType="map"  >
+   
+    
+    <if test="null!=params" >
+      <if test="null!=params.talkType and ''!=params.talkType" >
+       select count(1) 
+	  		<choose>
+			   <when test="params.talkType==1">
+			   		from user_talk t where  t.user_id = #{params.userId} 
+			   </when>
+			   <when test="params.talkType==2">
+			   		from user_talk t where EXISTS (
+					select f.friend_user_id from user_friend f where t.user_id =  f.friend_user_id and status =2  and f.user_id=#{params.userId})
+			   </when>
+			   <when test="params.talkType==3">
+			   		from user_talk t where EXISTS (
+					select f.attention_user_id from user_attention f where t.user_id =  f.attention_user_id and f.user_id=#{params.userId})
+					and talk_type =1
+			   </when>
+			   <otherwise>
+			    	from user_talk t where  t.user_id = #{params.userId}
+			   </otherwise>
+		  </choose>
+      </if>
+      
+      <if test="null!=params.status and ''!=params.status" >
+      		AND status  =#{params.status}
+      </if>
+      <if test="null!=params.lastQueryTime and ''!=params.lastQueryTime" >
+      			<![CDATA[ 	AND create_time >= #{params.lastQueryTime}]]>
+       </if>
+    </if>
+     
+    
+  </select>
+  
+  <select id="findTalkByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+	  		<choose>
+			   <when test="params.talkType==1">
+			   		from user_talk t where  t.user_id = #{params.userId}
+			   </when>
+			   <when test="params.talkType==2">
+			   		from user_talk t where EXISTS (
+					select f.friend_user_id from user_friend f where t.user_id =  f.friend_user_id and status =2  and f.user_id=#{params.userId})
+			   </when>
+			   <when test="params.talkType==3">
+			   		from user_talk t where EXISTS (
+					select f.attention_user_id from user_attention f where t.user_id =  f.attention_user_id and f.user_id=#{params.userId})
+					and talk_type =1
+			   </when>
+			   <otherwise>
+			    	from user_talk t where  t.user_id = #{params.userId}
+			   </otherwise>
+		  </choose>
+	  <if test="null!=params.status and ''!=params.status" >
+      		AND status  =#{params.status}
+      </if>
+      <if test="null!=params.lastQueryTime and ''!=params.lastQueryTime" >
+      			<![CDATA[ 	AND create_time >= #{params.lastQueryTime}]]>
+       </if>
+      ORDER BY t.create_time desc     
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+  
+</mapper>

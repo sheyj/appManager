@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.syj.app.web.dao.GroupUserMapper" >
+  <resultMap id="BaseResultMap" type="com.syj.app.web.model.GroupUser" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="master_id" property="masterId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />
+    <result column="user_image" property="userImage" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, master_id, user_id, user_account, user_name, group_id, user_image
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from group_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from group_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.syj.app.web.model.GroupUser" >
+    insert into group_user (id, master_id, user_id, 
+      user_account, user_name, group_id, 
+      user_image)
+    values (#{id,jdbcType=BIGINT}, #{masterId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{userAccount,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT}, 
+      #{userImage,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.syj.app.web.model.GroupUser" >
+    insert into group_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="masterId != null" >
+        master_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userAccount != null" >
+        user_account,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="userImage != null" >
+        user_image,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="masterId != null" >
+        #{masterId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userAccount != null" >
+        #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="userImage != null" >
+        #{userImage,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.syj.app.web.model.GroupUser" >
+    update group_user
+    <set >
+      <if test="masterId != null" >
+        master_id = #{masterId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userAccount != null" >
+        user_account = #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="userImage != null" >
+        user_image = #{userImage,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.syj.app.web.model.GroupUser" >
+    update group_user
+    set master_id = #{masterId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      user_account = #{userAccount,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=BIGINT},
+      user_image = #{userImage,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.groupId and ''!=params.groupId" >
+      		AND group_id  =#{params.groupId}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from group_user where 1=1
+		<include refid="queryCondition" />
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from group_user where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from group_user 
+         WHERE 1=1
+      <include refid="queryCondition" />       
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+  
+  <delete id="deleteByPrimarayKeyForModel" parameterType="com.syj.app.web.model.GroupUser" >
+    delete from group_user
+    where   1=1 
+     <if test="null!=id and ''!=id" >
+    and id = #{id,jdbcType=BIGINT}
+    </if>
+    <if test="null!=userId and ''!=userId" >
+    and user_id = #{userId,jdbcType=BIGINT}
+     </if>
+     <if test="null!=groupId and ''!=groupId" >
+    and group_id = #{groupId,jdbcType=BIGINT}
+      </if>
+  </delete>
+  
+</mapper>

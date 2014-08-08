@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.syj.app.web.dao.UserGroupMapper">
+  <resultMap id="BaseResultMap" type="com.syj.app.web.model.UserGroup">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="group_account" jdbcType="VARCHAR" property="groupAccount" />
+    <result column="master_id" jdbcType="BIGINT" property="masterId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="position_x" jdbcType="REAL" property="positionX" />
+    <result column="position_y" jdbcType="REAL" property="positionY" />
+    <result column="group_image" jdbcType="VARCHAR" property="groupImage" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, group_name, group_account, master_id, create_time, location, status, position_x, 
+    position_y,group_image,remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_group
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user_group
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.syj.app.web.model.UserGroup">
+    insert into user_group (id, group_name, group_account, 
+      master_id, create_time, location, 
+      status, position_x, position_y,group_image,remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{groupAccount,jdbcType=VARCHAR}, 
+      #{masterId,jdbcType=BIGINT}, now(), #{location,jdbcType=VARCHAR}, 
+      #{status,jdbcType=SMALLINT}, #{positionX,jdbcType=REAL}, #{positionY,jdbcType=REAL}, #{groupImage,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.syj.app.web.model.UserGroup">
+    insert into user_group
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="groupName != null">
+        group_name,
+      </if>
+      <if test="groupAccount != null">
+        group_account,
+      </if>
+      <if test="masterId != null">
+        master_id,
+      </if>
+        create_time,
+      <if test="location != null">
+        location,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="positionX != null">
+        position_x,
+      </if>
+      <if test="positionY != null">
+        position_y,
+      </if>
+      <if test="groupImage != null">
+        group_image,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupAccount != null">
+        #{groupAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="masterId != null">
+        #{masterId,jdbcType=BIGINT},
+      </if>
+     now(),
+      <if test="location != null">
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="positionX != null">
+        #{positionX,jdbcType=REAL},
+      </if>
+      <if test="positionY != null">
+        #{positionY,jdbcType=REAL},
+      </if>
+       <if test="groupImage != null">
+        #{groupImage,jdbcType=VARCHAR},
+      </if>
+       <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.syj.app.web.model.UserGroup">
+    update user_group
+    <set>
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupAccount != null">
+        group_account = #{groupAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="masterId != null">
+        master_id = #{masterId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null">
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="positionX != null">
+        position_x = #{positionX,jdbcType=REAL},
+      </if>
+      <if test="positionY != null">
+        position_y = #{positionY,jdbcType=REAL},
+      </if>
+       <if test="groupImage != null">
+        group_image = #{groupImage,jdbcType=VARCHAR},
+      </if>
+       <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.syj.app.web.model.UserGroup">
+    update user_group
+    set group_name = #{groupName,jdbcType=VARCHAR},
+      group_account = #{groupAccount,jdbcType=VARCHAR},
+      master_id = #{masterId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      location = #{location,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT},
+      position_x = #{positionX,jdbcType=REAL},
+      position_y = #{positionY,jdbcType=REAL},
+      group_image = #{groupImage,jdbcType=VARCHAR},
+      remark =#{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.groupName and ''!=params.groupName" >
+      		AND group_name  =#{params.groupName}
+      </if>
+      
+      <if test="null!=params.masterId and ''!=params.masterId" >
+      		AND master_id  =#{params.masterId}
+      </if>
+      
+      <if test="null!=params.status and ''!=params.status" >
+      		AND status =#{params.status}
+      </if>
+       <if test="null!=params.groupAccount and ''!=params.groupAccount" >
+      		AND group_account =#{params.groupAccount}
+      </if>
+       <if test="null!=params.groupNameLike and ''!=params.groupNameLike" >
+      		AND group_name  LIKE CONCAT(CONCAT('%',#{params.groupNameLike}),'%')
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from user_group where 1=1
+		<include refid="queryCondition" />
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from user_group where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from user_group 
+         WHERE 1=1
+      <include refid="queryCondition" />       
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+  
+  <delete id="deleteByPrimarayKeyForModel" parameterType="com.syj.app.web.model.UserGroup" >
+    delete from user_group
+    where  id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  
+  <select id="findByUserId" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from user_group t where 1=1 and status =1 
+		and EXISTS (select g.group_id from group_user g where t.id = g.group_id and g.user_id =#{params.userId,jdbcType=BIGINT})
+  </select>
+  
+  
+</mapper>

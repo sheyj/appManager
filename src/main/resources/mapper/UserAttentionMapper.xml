@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.syj.app.web.dao.UserAttentionMapper" >
+  <resultMap id="BaseResultMap" type="com.syj.app.web.model.UserAttention" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="attention_user_id" property="attentionUserId" jdbcType="BIGINT" />
+    <result column="attention_user_name" property="attentionUserName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, attention_user_id, attention_user_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_attention
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_attention
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.syj.app.web.model.UserAttention" >
+    insert into user_attention (id, user_id, attention_user_id, 
+      attention_user_name)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{attentionUserId,jdbcType=BIGINT}, 
+      #{attentionUserName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.syj.app.web.model.UserAttention" >
+    insert into user_attention
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="attentionUserId != null" >
+        attention_user_id,
+      </if>
+      <if test="attentionUserName != null" >
+        attention_user_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="attentionUserId != null" >
+        #{attentionUserId,jdbcType=BIGINT},
+      </if>
+      <if test="attentionUserName != null" >
+        #{attentionUserName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.syj.app.web.model.UserAttention" >
+    update user_attention
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="attentionUserId != null" >
+        attention_user_id = #{attentionUserId,jdbcType=BIGINT},
+      </if>
+      <if test="attentionUserName != null" >
+        attention_user_name = #{attentionUserName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.syj.app.web.model.UserAttention" >
+    update user_attention
+    set user_id = #{userId,jdbcType=BIGINT},
+      attention_user_id = #{attentionUserId,jdbcType=BIGINT},
+      attention_user_name = #{attentionUserName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.userId and ''!=params.userId" >
+      		AND user_id  =#{params.userId}
+      </if>
+      <if test="null!=params.attentionUserId and ''!=params.attentionUserId" >
+      		AND attention_user_id  =#{params.attentionUserId}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from user_attention where 1=1
+		<include refid="queryCondition" />
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from user_attention where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from user_attention 
+         WHERE 1=1
+      <include refid="queryCondition" />       
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+  
+  <delete id="deleteByPrimarayKeyForModel" parameterType="com.syj.app.web.model.UserAttention" >
+    delete from user_attention
+    where  id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  
+</mapper>

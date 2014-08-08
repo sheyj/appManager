@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.syj.app.web.dao.ApkVersionMapper" >
+  <resultMap id="BaseResultMap" type="com.syj.app.web.model.ApkVersion" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="version_no" property="versionNo" jdbcType="VARCHAR" />
+    <result column="apk_path" property="apkPath" jdbcType="VARCHAR" />
+    <result column="modify_content" property="modifyContent" jdbcType="VARCHAR" />
+    <result column="publish_date" property="publishDate" jdbcType="DATE" />
+    <result column="is_force" property="isForce" jdbcType="SMALLINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, version_no, apk_path, modify_content, publish_date, is_force, create_time, creater
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from apk_version
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from apk_version
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.syj.app.web.model.ApkVersion" >
+    insert into apk_version (id, version_no, apk_path, 
+      modify_content, publish_date, is_force, 
+      create_time, creater)
+    values (#{id,jdbcType=INTEGER}, #{versionNo,jdbcType=VARCHAR}, #{apkPath,jdbcType=VARCHAR}, 
+      #{modifyContent,jdbcType=VARCHAR}, #{publishDate,jdbcType=DATE}, #{isForce,jdbcType=SMALLINT}, 
+      now(), #{creater,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.syj.app.web.model.ApkVersion" >
+    insert into apk_version
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="versionNo != null" >
+        version_no,
+      </if>
+      <if test="apkPath != null" >
+        apk_path,
+      </if>
+      <if test="modifyContent != null" >
+        modify_content,
+      </if>
+      <if test="publishDate != null" >
+        publish_date,
+      </if>
+      <if test="isForce != null" >
+        is_force,
+      </if>
+        create_time,
+      <if test="creater != null" >
+        creater,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="versionNo != null" >
+        #{versionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="apkPath != null" >
+        #{apkPath,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyContent != null" >
+        #{modifyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null" >
+        #{publishDate,jdbcType=DATE},
+      </if>
+      <if test="isForce != null" >
+        #{isForce,jdbcType=SMALLINT},
+      </if>
+      now(),
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.syj.app.web.model.ApkVersion" >
+    update apk_version
+    <set >
+      <if test="versionNo != null" >
+        version_no = #{versionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="apkPath != null" >
+        apk_path = #{apkPath,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyContent != null" >
+        modify_content = #{modifyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null" >
+        publish_date = #{publishDate,jdbcType=DATE},
+      </if>
+      <if test="isForce != null" >
+        is_force = #{isForce,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null" >
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.syj.app.web.model.ApkVersion" >
+    update apk_version
+    set version_no = #{versionNo,jdbcType=VARCHAR},
+      apk_path = #{apkPath,jdbcType=VARCHAR},
+      modify_content = #{modifyContent,jdbcType=VARCHAR},
+      publish_date = #{publishDate,jdbcType=DATE},
+      is_force = #{isForce,jdbcType=SMALLINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creater = #{creater,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+   <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.versionNo and ''!=params.versionNo" >
+      		AND version_no  =#{params.versionNo}
+      </if>
+       <if test="null!=params.versionNoLike and ''!=params.versionNoLike" >
+      		AND version_no  LIKE CONCAT(CONCAT('%',#{params.versionNoLike}),'%')
+      </if>
+      <if test="null!=params.isForce and ''!=params.isForce" >
+      		AND is_force =#{params.isForce}
+      </if>
+       <if test="null!=params.createTimeStart and ''!=params.createTimeStart" >
+      	<![CDATA[ 	AND create_time >= CONCAT(#{params.createTimeStart},' 00:00:00')]]>
+      </if>
+      <if test="null!=params.createTimeEnd and ''!=params.createTimeEnd" >
+      	<![CDATA[ 	AND create_time <= CONCAT(#{params.createTimeEnd},' 23:59:59')]]>
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from apk_version where 1=1
+		<include refid="queryCondition" />
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from apk_version where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from apk_version 
+         WHERE 1=1
+      <include refid="queryCondition" />       
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+   <delete id="deleteByPrimarayKeyForModel" parameterType="com.syj.app.web.model.ApkVersion" >
+    delete from apk_version
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  
+    <select id="getNewVersion" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from apk_version
+   order by publish_date desc limit 0,1
+  </select>
+  
+  
+</mapper>

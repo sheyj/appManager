@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.syj.app.web.dao.AppUserMapper" >
+  <resultMap id="BaseResultMap" type="com.syj.app.web.model.AppUser" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_password" property="userPassword" jdbcType="VARCHAR" />
+    <result column="user_sex" property="userSex" jdbcType="SMALLINT" />
+    <result column="user_mobile" property="userMobile" jdbcType="VARCHAR" />
+    <result column="user_birthday" property="userBirthday" jdbcType="DATE" />
+    <result column="user_address" property="userAddress" jdbcType="VARCHAR" />
+    <result column="user_image" property="userImage" jdbcType="VARCHAR" />
+    <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+    <result column="android_version" property="androidVersion" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="position_x" property="positionX" jdbcType="REAL" />
+    <result column="position_y" property="positionY" jdbcType="REAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_account, user_name, user_password,user_sex, user_mobile, user_birthday, user_address, 
+    user_image, register_time, android_version, status, remark, last_login_time, location, position_x, position_y
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from app_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.syj.app.web.model.AppUser" >
+    insert into app_user (id, user_account, user_name, 
+      user_password,user_sex, user_mobile, user_birthday, 
+      user_address, user_image, register_time, 
+      android_version, status, remark, 
+      last_login_time, location, position_x, 
+      position_y
+      )
+    values (#{id,jdbcType=BIGINT}, #{userAccount,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{userPassword,jdbcType=VARCHAR},#{userSex,jdbcType=SMALLINT}, #{userMobile,jdbcType=VARCHAR}, #{userBirthday,jdbcType=DATE}, 
+      #{userAddress,jdbcType=VARCHAR}, #{userImage,jdbcType=VARCHAR}, now(), 
+      #{androidVersion,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, #{remark,jdbcType=VARCHAR}, 
+      #{lastLoginTime,jdbcType=TIMESTAMP}, #{location,jdbcType=VARCHAR}, #{positionX,jdbcType=REAL}, 
+      #{positionY,jdbcType=REAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.syj.app.web.model.AppUser" >
+    insert into app_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userAccount != null" >
+        user_account,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userPassword != null" >
+        user_password,
+      </if>
+       <if test="userSex != null" >
+        user_sex,
+      </if>
+      <if test="userMobile != null" >
+        user_mobile,
+      </if>
+      <if test="userBirthday != null" >
+        user_birthday,
+      </if>
+      <if test="userAddress != null" >
+        user_address,
+      </if>
+      <if test="userImage != null" >
+        user_image,
+      </if>
+        register_time,
+      <if test="androidVersion != null" >
+        android_version,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="positionX != null" >
+        position_x,
+      </if>
+      <if test="positionY != null" >
+        position_y,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userAccount != null" >
+        #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+       <if test="userPassword != null" >
+        #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null" >
+        #{userSex,jdbcType=SMALLINT},
+      </if>
+      <if test="userMobile != null" >
+        #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="userBirthday != null" >
+        #{userBirthday,jdbcType=DATE},
+      </if>
+      <if test="userAddress != null" >
+        #{userAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="userImage != null" >
+        #{userImage,jdbcType=VARCHAR},
+      </if>
+      now(),
+      <if test="androidVersion != null" >
+        #{androidVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null" >
+        #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="positionX != null" >
+        #{positionX,jdbcType=REAL},
+      </if>
+      <if test="positionY != null" >
+        #{positionY,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.syj.app.web.model.AppUser" >
+    update app_user
+    <set >
+     
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null" >
+        user_password = #{userPassword,jdbcType=VARCHAR},
+      </if>
+       <if test="userSex != null" >
+        user_sex = #{userSex,jdbcType=SMALLINT},
+      </if>
+      <if test="userMobile != null" >
+        user_mobile = #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="userBirthday != null" >
+        user_birthday = #{userBirthday,jdbcType=DATE},
+      </if>
+      <if test="userAddress != null" >
+        user_address = #{userAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="userImage != null" >
+        user_image = #{userImage,jdbcType=VARCHAR},
+      </if>
+      <if test="registerTime != null" >
+        register_time = #{registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="androidVersion != null" >
+        android_version = #{androidVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="lastLoginTime != null" >
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="positionX != null" >
+        position_x = #{positionX,jdbcType=REAL},
+      </if>
+      <if test="positionY != null" >
+        position_y = #{positionY,jdbcType=REAL},
+      </if>
+    </set>
+    where 1=1
+     <if test="id != null" >
+       and id = #{id,jdbcType=BIGINT}
+      </if>
+       <if test="userAccount != null" >
+       and user_account = #{userAccount,jdbcType=VARCHAR}
+      </if>
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.syj.app.web.model.AppUser" >
+    update app_user
+    set user_account = #{userAccount,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_password = #{userPassword,jdbcType=VARCHAR},
+      user_sex = #{userSex,jdbcType=SMALLINT},
+      user_mobile = #{userMobile,jdbcType=VARCHAR},
+      user_birthday = #{userBirthday,jdbcType=DATE},
+      user_address = #{userAddress,jdbcType=VARCHAR},
+      user_image = #{userImage,jdbcType=VARCHAR},
+      register_time = #{registerTime,jdbcType=TIMESTAMP},
+      android_version = #{androidVersion,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      location = #{location,jdbcType=VARCHAR},
+      position_x = #{positionX,jdbcType=REAL},
+      position_y = #{positionY,jdbcType=REAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <sql id="queryCondition" >
+     <if test="null!=params" >
+     <if test="null!=params.id and ''!=params.id" >
+      		AND id  =#{params.id}
+      </if>
+      <if test="null!=params.userPassword and ''!=params.userPassword" >
+      		AND user_password  =#{params.userPassword}
+      </if>
+      <if test="null!=params.userName and ''!=params.userName" >
+      		AND user_name  =#{params.userName}
+      </if>
+      <if test="null!=params.userSex and ''!=params.userSex" >
+      		AND user_sex =#{params.userSex}
+      </if>
+       <if test="null!=params.userAccount and ''!=params.userAccount" >
+      		AND user_account =#{params.userAccount}
+      </if>
+       <if test="null!=params.status and ''!=params.status" >
+      		AND status =#{params.status}
+      </if>
+       <if test="null!=params.userNameLike and ''!=params.userNameLike" >
+      		AND user_name  LIKE CONCAT(CONCAT('%',#{params.userNameLike}),'%')
+      </if>
+      <if test="null!=params.userAccountLike and ''!=params.userAccountLike" >
+      		AND user_account LIKE  CONCAT(CONCAT('%',#{params.userAccountLike}),'%')
+      </if>
+      <if test="null!=params.registerTimeStart and ''!=params.registerTimeStart" >
+      	<![CDATA[ 	AND register_time >= CONCAT(#{params.registerTimeStart},' 00:00:00')]]>
+      </if>
+      <if test="null!=params.registerTimeEnd and ''!=params.registerTimeEnd" >
+      	<![CDATA[ 	AND register_time <= CONCAT(#{params.registerTimeEnd},' 23:59:59')]]>
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from app_user where 1=1
+		<include refid="queryCondition" />
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from app_user where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from app_user 
+         WHERE 1=1
+      <include refid="queryCondition" />       
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+  
+</mapper>
