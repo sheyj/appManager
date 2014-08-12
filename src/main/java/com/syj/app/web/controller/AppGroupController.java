@@ -537,6 +537,8 @@ public class AppGroupController {
 							groupInfo.setGroupImage(tempUserGroup.getGroupImage());
 							groupInfo.setGroupName(tempUserGroup.getGroupName());
 							groupInfo.setRemark(tempUserGroup.getRemark());
+							groupInfo.setMasterId(tempUserGroup.getMasterId());
+							groupInfo.setCreateTime(tempUserGroup.getCreateTime());
 						}
 					}
 
@@ -551,4 +553,44 @@ public class AppGroupController {
 		return baseResult;
 	}
 
+	
+	
+	/**
+	 * 搜索群组信息
+	 * @param UserGroup
+	 * @return
+	 */
+	@RequestMapping(value = "/searchUserGroup")
+	@ResponseBody
+	public BaseResult searchUserGroup(String groupName,String groupAccount) {
+		BaseResult baseResult = new BaseResult();
+		try {
+			if(StringUtils.isEmpty(groupName) && StringUtils.isEmpty(groupAccount)){
+				baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
+				baseResult.setMessage("搜索参数为空！");
+				return baseResult;
+			}
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("groupName", groupName);
+			params.put("groupAccount", groupAccount);
+			
+		    List<UserGroup> userGroupList = userGroupService.findByBiz(null, params);
+		    if(null != userGroupList  &&  userGroupList.size()>0){
+		    	baseResult.getResultObj().put("userGroup", userGroupList.get(0));
+		    }
+		} catch (ServiceException e) {
+			logger.error("搜索群组异常！", e);
+			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
+			baseResult.setMessage(e.getMessage());
+		} catch (Exception e) {
+			logger.error("搜索群组异常！", e);
+			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
+			baseResult.setMessage(PublicConstans.OPERTION_FAIL_MESSAGE);
+		}
+		return baseResult;
+	}
+	
+	
+	
+	
 }

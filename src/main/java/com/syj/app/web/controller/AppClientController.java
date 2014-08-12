@@ -33,6 +33,7 @@ import com.syj.app.web.model.ApkVersion;
 import com.syj.app.web.model.AppActivate;
 import com.syj.app.web.model.AppUser;
 import com.syj.app.web.model.SystemParam;
+import com.syj.app.web.model.UserGroup;
 import com.syj.app.web.model.UserLocation;
 import com.syj.app.web.service.ApkVersionService;
 import com.syj.app.web.service.AppActivateService;
@@ -594,6 +595,43 @@ public class AppClientController {
 			
 		} catch (Exception e) {
 			logger.error(" 删除上传文件异常！", e);
+			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
+			baseResult.setMessage(PublicConstans.OPERTION_FAIL_MESSAGE);
+		}
+		return baseResult;
+	}
+	
+	
+	
+	/**
+	 * 搜索用户信息
+	 * @param UserGroup
+	 * @return
+	 */
+	@RequestMapping(value = "/searchUser")
+	@ResponseBody
+	public BaseResult searchUser(String userName,String userAccount) {
+		BaseResult baseResult = new BaseResult();
+		try {
+			if(StringUtils.isEmpty(userName) && StringUtils.isEmpty(userAccount)){
+				baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
+				baseResult.setMessage("搜索参数为空！");
+				return baseResult;
+			}
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("userName", userName);
+			params.put("userAccount", userAccount);
+			
+		    List<AppUser> userList = appUserService.findByBiz(null, params);
+		    if(null != userList  &&  userList.size()>0){
+		    	baseResult.getResultObj().put("appUser", userList.get(0));
+		    }
+		} catch (ServiceException e) {
+			logger.error("搜索用户异常！", e);
+			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
+			baseResult.setMessage(e.getMessage());
+		} catch (Exception e) {
+			logger.error("搜索用户异常！", e);
 			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
 			baseResult.setMessage(PublicConstans.OPERTION_FAIL_MESSAGE);
 		}

@@ -1,6 +1,11 @@
 package com.syj.app.web.vo;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.syj.app.util.JsonDateSerializer$19;
 
 /**
  * 群组信息
@@ -32,7 +37,12 @@ public class GroupInfo implements Serializable {
 	private Double latitude;
 	//距离 单位米
 	private Long distance;
-
+	//群主ID
+	private Long masterId;
+	//创建时间
+	@JsonSerialize(using = JsonDateSerializer$19.class)
+	private Date createTime;
+	
 	public Long getId() {
 		return id;
 	}
@@ -89,4 +99,21 @@ public class GroupInfo implements Serializable {
 		this.distance = distance;
 	}
 
+	public Long getMasterId() {
+		return masterId;
+	}
+
+	public void setMasterId(Long masterId) {
+		this.masterId = masterId;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	
 }
