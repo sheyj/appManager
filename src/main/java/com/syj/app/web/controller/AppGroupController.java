@@ -86,7 +86,7 @@ public class AppGroupController {
 			userGroupService.add(userGroup);
 			//查询群组 保存位置信息
 			List<UserGroup> list = userGroupService.findByBiz(new UserGroup(), params);
-			if(null != list   && list.size()>0){
+			if (null != list && list.size() > 0) {
 				UserGroup tempUserGroup = list.get(0);
 				if (userGroup.getPositionX() != null && userGroup.getPositionY() != null) {
 					double temp[] = { userGroup.getPositionX(), userGroup.getPositionY() };
@@ -96,12 +96,12 @@ public class AppGroupController {
 				}
 				//保存自己到群组成员中
 				GroupUser groupUser = new GroupUser();
-				
+
 				groupUser.setGroupId(tempUserGroup.getId());
 				groupUser.setUserId(tempUserGroup.getMasterId());
 				groupUser.setMasterId(tempUserGroup.getMasterId());
 				AppUser appUser = appUserService.findById(tempUserGroup.getMasterId().toString());
-				if(null != appUser){
+				if (null != appUser) {
 					groupUser.setUserAccount(appUser.getUserAccount());
 					groupUser.setUserName(appUser.getUserName());
 					groupUser.setUserImage(appUser.getUserImage());
@@ -147,8 +147,6 @@ public class AppGroupController {
 		return baseResult;
 	}
 
-	
-	
 	/**
 	 * 查询群组信息
 	 * @param UserGroup
@@ -159,7 +157,7 @@ public class AppGroupController {
 	public BaseResult queryUserGroupInfo(String groupId) {
 		BaseResult baseResult = new BaseResult();
 		try {
-		    UserGroup userGroup = userGroupService.findById(groupId);
+			UserGroup userGroup = userGroupService.findById(groupId);
 			baseResult.getResultObj().put("userGroup", userGroup);
 		} catch (ServiceException e) {
 			logger.error("查询群组信息异常！", e);
@@ -172,8 +170,7 @@ public class AppGroupController {
 		}
 		return baseResult;
 	}
-	
-	
+
 	/**
 	 * 修改群组信息
 	 * @param UserGroup
@@ -192,7 +189,7 @@ public class AppGroupController {
 				mongoTemplate.indexOps(UserGroup.class).ensureIndex(new GeospatialIndex("groupPosition"));
 				mongoTemplate.save(userGroup);
 			}
-			
+
 		} catch (ServiceException e) {
 			logger.error("修改群组异常！", e);
 			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
@@ -232,7 +229,6 @@ public class AppGroupController {
 		return baseResult;
 	}
 
-	
 	/**
 	 * 申请或者邀请加入群组
 	 * @param UserGroup
@@ -243,16 +239,16 @@ public class AppGroupController {
 	public BaseResult applyGroup(GroupUserApply groupUserApply) {
 		BaseResult baseResult = new BaseResult();
 		try {
-			
+
 			//查询用户信息
 			AppUser appUser = appUserService.findById(groupUserApply.getUserId().toString());
-			if(null != appUser){
+			if (null != appUser) {
 				groupUserApply.setUserAccount(appUser.getUserAccount());
 				groupUserApply.setUserName(appUser.getUserName());
 				groupUserApply.setUserImage(appUser.getUserImage());
 			}
 			userGroupService.addGroupUserApply(groupUserApply);
-			
+
 		} catch (ServiceException e) {
 			logger.error("申请加入群组异常！", e);
 			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
@@ -272,15 +268,15 @@ public class AppGroupController {
 	 */
 	@RequestMapping(value = "/auditGroup")
 	@ResponseBody
-	public BaseResult auditGroup(String id ,String status) {
+	public BaseResult auditGroup(String id, String status) {
 		BaseResult baseResult = new BaseResult();
 		try {
-			if(StringUtils.isEmpty(id) || StringUtils.isEmpty(status)){
+			if (StringUtils.isEmpty(id) || StringUtils.isEmpty(status)) {
 				baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
 				baseResult.setMessage("参数为空！");
 			}
-			
-			userGroupService.auditGroup(id,status);
+
+			userGroupService.auditGroup(id, status);
 		} catch (ServiceException e) {
 			logger.error("审核申请加入群组异常！", e);
 			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
@@ -303,7 +299,19 @@ public class AppGroupController {
 	public BaseResult applyGroupList(String groupId) {
 		BaseResult baseResult = new BaseResult();
 		try {
-			List<GroupUserApply> applyList = userGroupService.queryApplyGroupList(groupId,"","1"); 
+			List<GroupUserApply> applyList = userGroupService.queryApplyGroupList(groupId, "", "1");
+			if (null != applyList && applyList.size() > 0) {
+				for (GroupUserApply groupUserApply : applyList) {
+					UserGroup userGroup = userGroupService.findById(groupUserApply.getGroupId().toString());
+					if (null != userGroup) {
+						groupUserApply.setMasterId(userGroup.getMasterId());
+						groupUserApply.setGroupImage(userGroup.getGroupImage());
+						groupUserApply.setGroupRemark(userGroup.getRemark());
+						groupUserApply.setLongitude(Double.valueOf(userGroup.getPositionX()));
+						groupUserApply.setLatitude(Double.valueOf(userGroup.getPositionY()));
+					}
+				}
+			}
 			baseResult.getResultObj().put("applyList", applyList);
 		} catch (ServiceException e) {
 			logger.error("查询我的群组待审核申请信息异常！", e);
@@ -327,7 +335,19 @@ public class AppGroupController {
 	public BaseResult inviteGroupList(String userId) {
 		BaseResult baseResult = new BaseResult();
 		try {
-			List<GroupUserApply> applyList = userGroupService.queryApplyGroupList("", userId, "0");
+			List<GroupUserApply> applyList = userGroupService.queryApplyGroupList("", userId, "");
+			if (null != applyList && applyList.size() > 0) {
+				for (GroupUserApply groupUserApply : applyList) {
+					UserGroup userGroup = userGroupService.findById(groupUserApply.getGroupId().toString());
+					if (null != userGroup) {
+						groupUserApply.setMasterId(userGroup.getMasterId());
+						groupUserApply.setGroupImage(userGroup.getGroupImage());
+						groupUserApply.setGroupRemark(userGroup.getRemark());
+						groupUserApply.setLongitude(Double.valueOf(userGroup.getPositionX()));
+						groupUserApply.setLatitude(Double.valueOf(userGroup.getPositionY()));
+					}
+				}
+			}
 			baseResult.getResultObj().put("applyList", applyList);
 		} catch (ServiceException e) {
 			logger.error("查询组邀请我加入群组待审核申请信息异常！", e);
@@ -341,7 +361,6 @@ public class AppGroupController {
 		return baseResult;
 	}
 
-	
 	/**
 	 * 查询群组人员信息
 	 * @param UserGroup
@@ -365,7 +384,7 @@ public class AppGroupController {
 		}
 		return baseResult;
 	}
-	
+
 	/**
 	 * 发布群聊天消息
 	 * @param UserGroup
@@ -378,7 +397,7 @@ public class AppGroupController {
 		try {
 			//查询用户信息
 			AppUser appUser = appUserService.findById(groupMsg.getUserId().toString());
-			if(null != appUser){
+			if (null != appUser) {
 				groupMsg.setUserAccount(appUser.getUserAccount());
 				groupMsg.setUserName(appUser.getUserName());
 				groupMsg.setUserImage(appUser.getUserImage());
@@ -396,9 +415,7 @@ public class AppGroupController {
 		}
 		return baseResult;
 	}
-	
-	
-	
+
 	/**
 	 * 查询群组聊天消息
 	 * @param UserGroup
@@ -458,8 +475,7 @@ public class AppGroupController {
 				mongoTemplate.save(tempUserGroup);
 			} else {
 				Update update = Update.update("positionX", userGroup.getPositionX())
-						.set("positionY", userGroup.getPositionY())
-						.set("groupPosition", temp);
+						.set("positionY", userGroup.getPositionY()).set("groupPosition", temp);
 				mongoTemplate.updateFirst(query, update, UserLocation.class);
 			}
 		} catch (Exception e) {
@@ -539,6 +555,7 @@ public class AppGroupController {
 							groupInfo.setRemark(tempUserGroup.getRemark());
 							groupInfo.setMasterId(tempUserGroup.getMasterId());
 							groupInfo.setCreateTime(tempUserGroup.getCreateTime());
+							groupInfo.setGroupAccount(tempUserGroup.getGroupAccount());
 						}
 					}
 
@@ -553,8 +570,6 @@ public class AppGroupController {
 		return baseResult;
 	}
 
-	
-	
 	/**
 	 * 搜索群组信息
 	 * @param UserGroup
@@ -562,10 +577,10 @@ public class AppGroupController {
 	 */
 	@RequestMapping(value = "/searchUserGroup")
 	@ResponseBody
-	public BaseResult searchUserGroup(String groupName,String groupAccount) {
+	public BaseResult searchUserGroup(String groupName, String groupAccount) {
 		BaseResult baseResult = new BaseResult();
 		try {
-			if(StringUtils.isEmpty(groupName) && StringUtils.isEmpty(groupAccount)){
+			if (StringUtils.isEmpty(groupName) && StringUtils.isEmpty(groupAccount)) {
 				baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
 				baseResult.setMessage("搜索参数为空！");
 				return baseResult;
@@ -573,11 +588,11 @@ public class AppGroupController {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("groupName", groupName);
 			params.put("groupAccount", groupAccount);
-			
-		    List<UserGroup> userGroupList = userGroupService.findByBiz(null, params);
-		    if(null != userGroupList  &&  userGroupList.size()>0){
-		    	baseResult.getResultObj().put("userGroup", userGroupList.get(0));
-		    }
+
+			List<UserGroup> userGroupList = userGroupService.findByBiz(null, params);
+			if (null != userGroupList && userGroupList.size() > 0) {
+				baseResult.getResultObj().put("userGroup", userGroupList.get(0));
+			}
 		} catch (ServiceException e) {
 			logger.error("搜索群组异常！", e);
 			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
@@ -589,8 +604,5 @@ public class AppGroupController {
 		}
 		return baseResult;
 	}
-	
-	
-	
-	
+
 }

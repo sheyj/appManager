@@ -89,11 +89,14 @@ public class UserGroupServiceImpl extends BaseServiceImpl implements UserGroupSe
 			//审核通过 插入到用群组
 			GroupUser groupUser = new GroupUser();
 			GroupUserApply groupUserApply = groupUserApplyMapper.selectByPrimaryKey(id);
-			
 			groupUser.setGroupId(groupUserApply.getGroupId());
 			groupUser.setUserId(groupUserApply.getUserId());
 			groupUserMapper.deleteByPrimarayKeyForModel(groupUser);
 			
+			UserGroup userGroup =userGroupMapper.selectByPrimaryKey(groupUserApply.getGroupId().toString());
+			if(null!= userGroup){
+				groupUser.setMasterId(userGroup.getMasterId());
+			}
 			groupUser.setUserAccount(groupUserApply.getUserAccount());
 			groupUser.setUserName(groupUserApply.getUserName());
 			groupUser.setUserImage(groupUserApply.getUserImage());

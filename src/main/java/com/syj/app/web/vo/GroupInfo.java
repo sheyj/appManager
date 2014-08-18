@@ -27,6 +27,9 @@ public class GroupInfo implements Serializable {
 
 	//群组名称
 	private String groupName;
+	
+	private String groupAccount;
+	
 	//群组图片
 	private String groupImage;
 	//群组备注
@@ -113,6 +116,14 @@ public class GroupInfo implements Serializable {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public String getGroupAccount() {
+		return groupAccount;
+	}
+
+	public void setGroupAccount(String groupAccount) {
+		this.groupAccount = groupAccount;
 	}
 
 	

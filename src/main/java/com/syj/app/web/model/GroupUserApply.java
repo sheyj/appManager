@@ -1,15 +1,23 @@
 package com.syj.app.web.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.syj.app.util.JsonDateSerializer$19;
 
-public class GroupUserApply {
+public class GroupUserApply implements Serializable{
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 3550255912955112122L;
+
 	private Long id;
 
 	private Long groupId;
+
+	private Long masterId;
 
 	private String groupName;
 	//申请类型 0 群主邀请，1个人申请
@@ -26,9 +34,19 @@ public class GroupUserApply {
 
 	private String remark;
 	//状态 0申请中1审核通过2审核拒绝
-	private Short status =0 ;
+	private Short status = 0;
 	@JsonSerialize(using = JsonDateSerializer$19.class)
 	private Date updateTime;
+
+	private String groupRemark;
+	//群组图片
+	private String groupImage;
+
+	//经度
+	private Double longitude;
+	//维度
+	private Double latitude;
+	
 
 	public Long getId() {
 		return id;
@@ -197,4 +215,47 @@ public class GroupUserApply {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+
+	public Long getMasterId() {
+		return masterId;
+	}
+
+	public void setMasterId(Long masterId) {
+		this.masterId = masterId;
+	}
+
+	public String getGroupRemark() {
+		return groupRemark;
+	}
+
+	public void setGroupRemark(String groupRemark) {
+		this.groupRemark = groupRemark;
+	}
+
+	public String getGroupImage() {
+		return groupImage;
+	}
+
+	public void setGroupImage(String groupImage) {
+		this.groupImage = groupImage;
+	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	
+	
+	
 }
