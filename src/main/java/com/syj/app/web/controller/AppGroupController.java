@@ -34,6 +34,7 @@ import com.syj.app.web.model.UserLocation;
 import com.syj.app.web.model.UserTalk;
 import com.syj.app.web.service.AppUserService;
 import com.syj.app.web.service.UserGroupService;
+import com.syj.app.web.vo.BaseAppReq;
 import com.syj.app.web.vo.BaseResult;
 import com.syj.app.web.vo.GroupInfo;
 import com.syj.app.web.vo.GroupMsgVo;
@@ -332,10 +333,24 @@ public class AppGroupController {
 	 */
 	@RequestMapping(value = "/inviteGroupList")
 	@ResponseBody
-	public BaseResult inviteGroupList(String userId) {
+	public BaseResult inviteGroupList(BaseAppReq appReq) {
 		BaseResult baseResult = new BaseResult();
 		try {
-			List<GroupUserApply> applyList = userGroupService.queryApplyGroupList("", userId, "");
+			
+			int pageNo = StringUtils.isEmpty(appReq.getPageNo()) ? 1 : Integer.parseInt(appReq
+					.getPageNo());
+			int pageSize = StringUtils.isEmpty(appReq.getPageSize()) ? 10 : Integer.parseInt(appReq
+					.getPageSize());
+			int total = this.userGroupService.findApplyGroupCount(appReq.getUserId());
+			baseResult.getResultObj().put("total", total);
+			if (total == 0) {
+				baseResult.getResultObj().put("rows", new ArrayList<GroupUserApply>());
+				return baseResult;
+			}
+			
+			SimplePage page = new SimplePage(pageNo, pageSize, (int) total);
+			
+			List<GroupUserApply> applyList = userGroupService.queryApplyGroupListByPage(appReq.getUserId(),page);
 			if (null != applyList && applyList.size() > 0) {
 				for (GroupUserApply groupUserApply : applyList) {
 					UserGroup userGroup = userGroupService.findById(groupUserApply.getGroupId().toString());
@@ -348,7 +363,7 @@ public class AppGroupController {
 					}
 				}
 			}
-			baseResult.getResultObj().put("applyList", applyList);
+			baseResult.getResultObj().put("rows", applyList);
 		} catch (ServiceException e) {
 			logger.error("查询组邀请我加入群组待审核申请信息异常！", e);
 			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
@@ -604,5 +619,35 @@ public class AppGroupController {
 		}
 		return baseResult;
 	}
+	
+	
+	/**
+	 * 退出或者删除群组成员信息
+	 * @param UserGroup
+	 * @return
+	 */
+	@RequestMapping(value = "/delGroupUser")
+	@ResponseBody
+	public BaseResult delGroupUser(String userId, String groupId) {
+		BaseResult baseResult = new BaseResult();
+		try {
+			if (StringUtils.isEmpty(userId) && StringUtils.isEmpty(groupId)) {
+				baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
+				baseResult.setMessage("参数为空！");
+				return baseResult;
+			}
+			userGroupService.delGroupUser(userId,groupId);
+		} catch (ServiceException e) {
+			logger.error("搜索群组异常！", e);
+			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
+			baseResult.setMessage(e.getMessage());
+		} catch (Exception e) {
+			logger.error("搜索群组异常！", e);
+			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
+			baseResult.setMessage(PublicConstans.OPERTION_FAIL_MESSAGE);
+		}
+		return baseResult;
+	}
+	
 
 }

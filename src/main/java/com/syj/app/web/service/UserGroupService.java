@@ -97,4 +97,10 @@ public interface UserGroupService extends BaseService {
 	 */
 	void addGroupUser(GroupUser groupUser)throws ServiceException;
 
+	int findApplyGroupCount(String userId)throws ServiceException;
+
+	List<GroupUserApply> queryApplyGroupListByPage( String userId,  SimplePage page)throws ServiceException;
+
+	void delGroupUser(String userId, String groupId)throws ServiceException;
+
 }

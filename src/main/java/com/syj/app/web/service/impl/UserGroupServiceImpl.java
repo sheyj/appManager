@@ -85,10 +85,10 @@ public class UserGroupServiceImpl extends BaseServiceImpl implements UserGroupSe
 
 	@Transactional
 	public void auditGroup(String id, String status) throws ServiceException {
+		GroupUserApply groupUserApply = groupUserApplyMapper.selectByPrimaryKey(id);
 		if ("1".equals(status)) {
 			//审核通过 插入到用群组
 			GroupUser groupUser = new GroupUser();
-			GroupUserApply groupUserApply = groupUserApplyMapper.selectByPrimaryKey(id);
 			groupUser.setGroupId(groupUserApply.getGroupId());
 			groupUser.setUserId(groupUserApply.getUserId());
 			groupUserMapper.deleteByPrimarayKeyForModel(groupUser);
@@ -103,7 +103,12 @@ public class UserGroupServiceImpl extends BaseServiceImpl implements UserGroupSe
 			groupUserMapper.insertSelective(groupUser);
 		}
 		//审核通过和审核拒绝都是直接删除
-		groupUserApplyMapper.deleteByPrimaryKey(id);
+		//groupUserApplyMapper.deleteByPrimaryKey(id);
+		
+		//修改为只更改状态
+		groupUserApply.setStatus(Short.valueOf(status));
+		groupUserApplyMapper.updateByPrimaryKeySelective(groupUserApply);
+		
 	}
 
 	public List<GroupUserApply> queryApplyGroupList(String groupId,String userId,String applyType) throws ServiceException {
@@ -142,6 +147,34 @@ public class UserGroupServiceImpl extends BaseServiceImpl implements UserGroupSe
 
 	public void addGroupUser(GroupUser groupUser) throws ServiceException {
 		groupUserMapper.insertSelective(groupUser);
+	}
+
+	public int findApplyGroupCount(String userId) throws ServiceException {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("userId", userId);
+		return groupUserApplyMapper.selectCount(params);
+	}
+
+	public List<GroupUserApply> queryApplyGroupListByPage(String userId, SimplePage page)
+			throws ServiceException {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("userId", userId);
+		return groupUserApplyMapper.selectByPage(page, null, null, params);
+	}
+
+	@Transactional
+	public void delGroupUser(String userId, String groupId) throws ServiceException {
+		//删除群组申请记录
+		GroupUserApply groupUserApply = new GroupUserApply();
+		groupUserApply.setGroupId(Long.valueOf(groupId));
+		groupUserApply.setUserId(Long.valueOf(userId));
+		groupUserApplyMapper.deleteByPrimarayKeyForModel(groupUserApply);
+		//删除群组用户
+		GroupUser groupUser = new GroupUser();
+		groupUser.setGroupId(Long.valueOf(groupId));
+		groupUser.setUserId(Long.valueOf(userId));
+		groupUserMapper.deleteByPrimarayKeyForModel(groupUser);
+		
 	}
 
 }
