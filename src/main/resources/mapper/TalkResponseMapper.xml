@@ -135,7 +135,14 @@
       status = #{status,jdbcType=SMALLINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  
+  <select id="getLastTalkResponse" resultMap="BaseResultMap" parameterType="com.syj.app.web.model.TalkResponse" >
+      select  
+      <include refid="Base_Column_List" />
+       from talk_response 
+         WHERE talk_id  =#{talkId} and from_user_id=#{fromUserId}
+      order by  response_time desc       
+      limit 0,1
+  </select>
   
   <sql id="queryCondition" >
      <if test="null!=params" >

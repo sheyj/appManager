@@ -47,6 +47,16 @@ public class GroupUserApply implements Serializable{
 	//维度
 	private Double latitude;
 	
+	private String groupAccount;
+	
+	
+	public String getGroupAccount() {
+		return groupAccount;
+	}
+
+	public void setGroupAccount(String groupAccount) {
+		this.groupAccount = groupAccount;
+	}
 
 	public Long getId() {
 		return id;

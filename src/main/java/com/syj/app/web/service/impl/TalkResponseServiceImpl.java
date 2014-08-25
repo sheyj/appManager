@@ -5,8 +5,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.syj.app.dao.BaseMapper;
+import com.syj.app.exception.ServiceException;
 import com.syj.app.service.impl.BaseServiceImpl;
 import com.syj.app.web.dao.TalkResponseMapper;
+import com.syj.app.web.model.TalkResponse;
 import com.syj.app.web.service.TalkResponseService;
 
 /**
@@ -26,6 +28,10 @@ public class TalkResponseServiceImpl extends BaseServiceImpl implements TalkResp
 	@Override
 	public BaseMapper init() {
 		return talkResponseMapper;
+	}
+
+	public TalkResponse getLastTalkResponse(TalkResponse talkResponse) throws ServiceException {
+		return talkResponseMapper.getLastTalkResponse(talkResponse);
 	}
 
 }

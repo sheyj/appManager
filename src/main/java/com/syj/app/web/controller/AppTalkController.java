@@ -222,6 +222,8 @@ public class AppTalkController {
 		BaseResult baseResult = new BaseResult();
 		try {
 			talkResponseService.add(talkResponse);
+			TalkResponse tempTalkResponse = talkResponseService.getLastTalkResponse(talkResponse);
+			baseResult.getResultObj().put("talkResponse", tempTalkResponse);
 		} catch (ServiceException e) {
 			logger.error("用户发布说说评论异常！", e);
 			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);

@@ -108,8 +108,9 @@ public class AppGroupController {
 					groupUser.setUserImage(appUser.getUserImage());
 				}
 				userGroupService.addGroupUser(groupUser);
+				baseResult.getResultObj().put("userGroup", tempUserGroup);
 			}
-			baseResult.getResultObj().put("userGroup", userGroup);
+			
 		} catch (ServiceException e) {
 			logger.error("创建群组异常！", e);
 			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
@@ -190,7 +191,9 @@ public class AppGroupController {
 				mongoTemplate.indexOps(UserGroup.class).ensureIndex(new GeospatialIndex("groupPosition"));
 				mongoTemplate.save(userGroup);
 			}
-
+			UserGroup tempUserGroup = userGroupService.findById(userGroup.getId().toString());
+			baseResult.getResultObj().put("userGroup", tempUserGroup);
+				
 		} catch (ServiceException e) {
 			logger.error("修改群组异常！", e);
 			baseResult.setSuccess(PublicConstans.OPERTION_FAIL);
@@ -300,7 +303,7 @@ public class AppGroupController {
 	public BaseResult applyGroupList(String groupId) {
 		BaseResult baseResult = new BaseResult();
 		try {
-			List<GroupUserApply> applyList = userGroupService.queryApplyGroupList(groupId, "", "1");
+			List<GroupUserApply> applyList = userGroupService.queryApplyGroupList(groupId, "", "");
 			if (null != applyList && applyList.size() > 0) {
 				for (GroupUserApply groupUserApply : applyList) {
 					UserGroup userGroup = userGroupService.findById(groupUserApply.getGroupId().toString());
@@ -310,6 +313,7 @@ public class AppGroupController {
 						groupUserApply.setGroupRemark(userGroup.getRemark());
 						groupUserApply.setLongitude(Double.valueOf(userGroup.getPositionX()));
 						groupUserApply.setLatitude(Double.valueOf(userGroup.getPositionY()));
+						groupUserApply.setGroupAccount(userGroup.getGroupAccount());
 					}
 				}
 			}
@@ -360,6 +364,7 @@ public class AppGroupController {
 						groupUserApply.setGroupRemark(userGroup.getRemark());
 						groupUserApply.setLongitude(Double.valueOf(userGroup.getPositionX()));
 						groupUserApply.setLatitude(Double.valueOf(userGroup.getPositionY()));
+						groupUserApply.setGroupAccount(userGroup.getGroupAccount());
 					}
 				}
 			}
